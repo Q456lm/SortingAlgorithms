@@ -1,21 +1,11 @@
 /**
- * Exercise 23.1 - Insertion Sort and Bubble Sort
+ * Exercise 23_01
  *
- * Implement four generic sort methods:
- *   1. insertionSort using Comparable
- *   2. insertionSort using Comparator
- *   3. bubbleSort using Comparable
- *   4. bubbleSort using Comparator
+ * Implements sorting for doing insertion sort and bubbleSort.
+ * Use Comparable and Comparator for sorting.
+ * Idea is for sorting methods to be generic.
  *
- * Then test all four methods in main().
- *
- * HINT - The only difference between the Comparable and Comparator versions
- * is how you compare two elements:
- *
- *   Comparable:  list[i].compareTo(list[i+1]) > 0
- *   Comparator:  comparator.compare(list[i], list[i+1]) > 0
- *
- * Everything else (the loops, the swaps, the logic) stays the same.
+ *Name: Quint Bunting
  */
 
 import java.util.Arrays;
@@ -24,7 +14,7 @@ import java.util.Comparator;
 public class Exercise23_01 {
 
     // ---------------------------------------------------------------
-    // TODO 1: Implement insertionSort using Comparable
+    //Implement insertionSort using Comparable
     //
     // Method signature:
     //   public static <E extends Comparable<E>> void insertionSort(E[] list)
@@ -36,23 +26,47 @@ public class Exercise23_01 {
     //     than currentElement (use compareTo)
     //   - Place currentElement at list[k + 1]
     // ---------------------------------------------------------------
+    public static <E extends Comparable<E>> void insertionSort(E[] list){
+        for (int i = 1; i < list.length; i++){
+            E currentElement = list[i];
+            int k  = i - 1;
 
+            while (k >= 0 && list[k].compareTo(currentElement) > 0){
+                list[k+1] = list[k];
+                k--;
+            }
+
+            list[k + 1] = currentElement;
+        }
+    }
 
     // ---------------------------------------------------------------
-    // TODO 2: Implement insertionSort using Comparator
+    //Implement insertionSort using Comparator
     //
     // Method signature:
     //   public static <E> void insertionSort(E[] list, Comparator<? super E> comparator)
     //
     // Same logic as TODO 1, but replace compareTo() with comparator.compare()
     // ---------------------------------------------------------------
+    public static <E> void insertionSort(E[] list, Comparator<? super E> comparator){
+        for (int i = 1; i < list.length; i++){
+            E currentElement = list[i];
+            int k  = i - 1;
 
+            while (k >= 0 && comparator.compare(list[k],currentElement) > 0){
+                list[k+1] = list[k];
+                k--;
+            }
+
+            list[k + 1] = currentElement;
+        }
+    }
 
     // ---------------------------------------------------------------
-    // TODO 3: Implement bubbleSort using Comparable
+    //Implement bubbleSort using Comparable
     //
     // Method signature:
-    //   public static <E extends Comparable<E>> void bubbleSort(E[] list)
+    //public static <E extends Comparable<E>> void bubbleSort(E[] list)
     //
     // Steps:
     //   - Use a boolean needNextPass, start true
@@ -61,6 +75,24 @@ public class Exercise23_01 {
     //   - Inner loop: i from 0 to list.length - k - 1
     //   - If list[i].compareTo(list[i+1]) > 0, swap and set needNextPass = true
     // ---------------------------------------------------------------
+    public static <E extends Comparable<E>> void bubbleSort(E[] list){
+        boolean needNextPass = true;
+
+        for (int k = 1; k < list.length && needNextPass; k++) {
+            needNextPass = false;  // assume sorted until a swap occurs
+
+            for (int i = 0; i < list.length - k; i++) {
+                if (list[i].compareTo(list[i+1]) > 0) {
+                    // Swap adjacent elements
+                    E temp = list[i];
+                    list[i] = list[i + 1];
+                    list[i + 1] = temp;
+
+                    needNextPass = true;  // a swap occurred, keep going
+                }
+            }
+        }
+    }
 
 
     // ---------------------------------------------------------------
@@ -71,7 +103,24 @@ public class Exercise23_01 {
     //
     // Same logic as TODO 3, but replace compareTo() with comparator.compare()
     // ---------------------------------------------------------------
+    public static <E> void bubbleSort(E[] list, Comparator<? super E> comparator){
+        boolean needNextPass = true;
 
+        for (int k = 1; k < list.length && needNextPass; k++) {
+            needNextPass = false;  // assume sorted until a swap occurs
+
+            for (int i = 0; i < list.length - k; i++) {
+                if (comparator.compare(list[i], list[i+1]) > 0) {
+                    // Swap adjacent elements
+                    E temp = list[i];
+                    list[i] = list[i + 1];
+                    list[i + 1] = temp;
+
+                    needNextPass = true;  // a swap occurred, keep going
+                }
+            }
+        }
+    }
 
     public static void main(String[] args) {
 
