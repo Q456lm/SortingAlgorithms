@@ -1,33 +1,20 @@
 /**
- * Exercise 23.2 - Merge Sort
+ * Exercise23_02.java
  *
- * Implement two generic merge sort methods:
- *   1. mergeSort using Comparable
- *   2. mergeSort using Comparator
+ * Uses Comparator and Compare for Merge Sorting any type of list.
  *
- * Each mergeSort method needs a corresponding merge helper method.
- *
- * HINT 1 - Generic array creation:
- *   You cannot write: E[] firstHalf = new E[size];
- *   Instead write:    E[] firstHalf = (E[]) new Object[size];
- *
- * HINT 2 - The only comparison change (in your merge method):
- *   int version:        list1[c1] < list2[c2]
- *   Comparable version: list1[c1].compareTo(list2[c2]) < 0
- *   Comparator version: comparator.compare(list1[c1], list2[c2]) < 0
- *
- * HINT 3 - Comparator version:
- *   The comparator must be passed through to the recursive mergeSort calls
- *   AND to the merge helper method.
+ * Name: Quint Bunting
  */
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Exercise23_02 {
 
     // ---------------------------------------------------------------
-    // TODO 1: Implement mergeSort using Comparable
+    //Implement mergeSort using Comparable
     //
     // Method signature:
     //   public static <E extends Comparable<E>> void mergeSort(E[] list)
@@ -41,10 +28,27 @@ public class Exercise23_02 {
     //   - Recursively call mergeSort on firstHalf and secondHalf
     //   - Call merge(firstHalf, secondHalf, list)
     // ---------------------------------------------------------------
+    public static <E extends Comparable<E>> void mergeSort(E[] list){
+        if (list.length > 1) {
+            // Split into two halves
+            E[] firstHalf = (E[])Array.newInstance(list.getClass().getComponentType(), list.length /2);
+            System.arraycopy(list, 0, firstHalf, 0, list.length / 2);
 
+            int secondHalfLength = list.length - list.length / 2;
+            E[] secondHalf = (E[])Array.newInstance(list.getClass().getComponentType(),secondHalfLength);
+            System.arraycopy(list, list.length / 2, secondHalf, 0, secondHalfLength);
+
+            // Recursively sort each half
+            mergeSort(firstHalf);
+            mergeSort(secondHalf);
+
+            // Merge the sorted halves back into list
+            merge(firstHalf, secondHalf, list);
+        }
+    }
 
     // ---------------------------------------------------------------
-    // TODO 2: Implement merge helper for Comparable version
+    //Implement merge helper for Comparable version
     //
     // Method signature:
     //   private static <E extends Comparable<E>>
@@ -60,10 +64,28 @@ public class Exercise23_02 {
     //   - Copy any remaining elements from list1
     //   - Copy any remaining elements from list2
     // ---------------------------------------------------------------
+    private static <E extends Comparable<E>> void merge(E[] list1, E[] list2, E[] temp){
+        int current1 = 0;  // pointer for list1
+        int current2 = 0;  // pointer for list2
+        int current3 = 0;  // pointer for temp (result)
 
+        while (current1 < list1.length && current2 < list2.length) {
+            if (list1[current1].compareTo(list2[current2]) < 0)
+                temp[current3++] = list1[current1++];
+            else
+                temp[current3++] = list2[current2++];
+        }
+
+        // Copy remaining elements from whichever list isn't exhausted
+        while (current1 < list1.length)
+            temp[current3++] = list1[current1++];
+
+        while (current2 < list2.length)
+            temp[current3++] = list2[current2++];
+    }
 
     // ---------------------------------------------------------------
-    // TODO 3: Implement mergeSort using Comparator
+    //Implement mergeSort using Comparator
     //
     // Method signature:
     //   public static <E> void mergeSort(E[] list, Comparator<? super E> comparator)
@@ -72,7 +94,24 @@ public class Exercise23_02 {
     //   - Pass comparator to both recursive mergeSort calls
     //   - Pass comparator to the merge call
     // ---------------------------------------------------------------
+    public static <E> void mergeSort(E[] list, Comparator<? super E> comparator){
+        if (list.length > 1) {
+            // Split into two halves
+            E[] firstHalf = (E[]) new Object[list.length / 2];
+            System.arraycopy(list, 0, firstHalf, 0, list.length / 2);
 
+            int secondHalfLength = list.length - list.length / 2;
+            E[] secondHalf = (E[]) new Object[secondHalfLength];
+            System.arraycopy(list, list.length / 2, secondHalf, 0, secondHalfLength);
+
+            // Recursively sort each half
+            mergeSort(firstHalf,comparator);
+            mergeSort(secondHalf,comparator);
+
+            // Merge the sorted halves back into list
+            merge(firstHalf, secondHalf, list, comparator);
+        }
+    }
 
     // ---------------------------------------------------------------
     // TODO 4: Implement merge helper for Comparator version
@@ -84,7 +123,25 @@ public class Exercise23_02 {
     // Same structure as TODO 2, but use:
     //   comparator.compare(list1[current1], list2[current2]) < 0
     // ---------------------------------------------------------------
+    private static <E> void merge(E[] list1, E[] list2, E[] temp, Comparator<? super E> comparator){
+        int current1 = 0;  // pointer for list1
+        int current2 = 0;  // pointer for list2
+        int current3 = 0;  // pointer for temp (result)
 
+        while (current1 < list1.length && current2 < list2.length) {
+            if (comparator.compare(list1[current1],list2[current2]) < 0)
+                temp[current3++] = list1[current1++];
+            else
+                temp[current3++] = list2[current2++];
+        }
+
+        // Copy remaining elements from whichever list isn't exhausted
+        while (current1 < list1.length)
+            temp[current3++] = list1[current1++];
+
+        while (current2 < list2.length)
+            temp[current3++] = list2[current2++];
+    }
 
     public static void main(String[] args) {
 
