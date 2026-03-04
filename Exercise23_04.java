@@ -62,6 +62,26 @@ public class Exercise23_04 {
 
         // TODO: Add median-of-three pivot selection here
         // (swap the median element to list[first], then the code below runs normally)
+        if (last-first < 2){
+            System.out.print("");
+        }else{
+            int mid = (first + last)/2;
+            if ((first < mid && mid < last) || (last < mid && mid < first)) {
+                int temp = list[first];
+                list[first] = list[mid];
+                list[mid] = temp;
+            }
+            else if ((mid < first && first < last) || (last < first && first < mid)) {
+                int temp = list[first];
+                list[first] = list[first];
+                list[first] = temp;
+            }
+            else {
+                int temp = list[first];
+                list[first] = list[last];
+                list[last] = temp;
+            }
+        }
 
         int pivot = list[first];
         int low = first + 1;
