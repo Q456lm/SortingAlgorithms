@@ -1,32 +1,10 @@
 /**
  * Exercise 23.4 - Improve Quick Sort
  *
- * The quick sort below uses the first element as the pivot.
- * This causes O(n²) performance on already-sorted arrays.
+ * Uses Median of Three to determine pivot in quick sort.
+ * If there are less then three values it will just use first value.
  *
- * Your job: modify the partition method to use median-of-three
- * pivot selection instead of always using list[first].
- *
- * WHAT TO CHANGE:
- *   Only modify the partition method.
- *   quickSort does not need to change.
- *
- * MEDIAN-OF-THREE:
- *   Look at list[first], list[mid], and list[last]
- *   where mid = (first + last) / 2
- *   Use the median of those three values as the pivot.
- *
- * HINT - Finding the median of three values a, b, c:
- *   if      (a < b && b < c) || (c < b && b < a)  → median is b
- *   else if (b < a && a < c) || (c < a && a < b)  → median is a
- *   else                                           → median is c
- *
- * HINT - Once you find the median value, swap that element to
- *   list[first] so the rest of the partition logic works unchanged.
- *
- * EDGE CASE:
- *   If last - first < 2, fall back to list[first] as pivot
- *   (not enough elements for median-of-three).
+ * Name: Quint Bunting
  */
 
 import java.util.Arrays;
